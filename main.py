@@ -1,3 +1,4 @@
+from typing import Type
 import sympy as sp
 from sympy import sympify
 
@@ -68,11 +69,14 @@ for j in coefficients:
     answer += int(j)*(float(z)**iter)
     iter+=1
 
+if (answer != 0.06884969710791095):
+    raise KeyError("Der Wert stimmt nicht")
 
 
 
 
 print("Answer: " + str(answer)) # Das Ergebnis wird geprintet
+
 
 
 
