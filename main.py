@@ -1,84 +1,40 @@
-from typing import Type
-import sympy as sp
-from sympy import sympify
+import math
 
-P0 = sp.Symbol("P0")
-P1 = sp.Symbol("P1")
-P2 = sp.Symbol("P2")
+p0 = [-1,3,-3,1]
+p1 = [0,-3,10,-10]
+p2 = [0,0,9,9]
 
-z = float(eval("1/18")) # Unser Wert von z (ind er Aufgabe gegeben)
+def prod(l):
+    p = 1
+    for a in l:
+        p *= a
+    return p
 
-Theta = sp.Symbol("Theta")
+def diff(p,d):
+    return [a*prod([i-j for j in range(0,d)]) for i,a in enumerate(p)][d:]
 
-# Die P_0, P_1 und P_2 Funktionen
-P0_Equation = "((Theta)**3)-(3*((Theta)**2))+(3*(Theta))-1"
-P1_Equation = "(-10)*((Theta)**3)+(10*((Theta)**2))-(3*(Theta))"
-P2_Equation = "(9*((Theta)**3))+(9*((Theta)**2))"
+def ev(p):
+    return lambda k : sum([a*k**i for i,a in enumerate(p)])
 
+# Computations:
 
-# Kurze functions womit ich etwas in die P Funktionen einsetzen kann
-# z.B. P_0(i) ist ja einfach die P_0 Funktion wo ich immer statt Theta
-# i schreibe.
-def p0(theta):
-    return P0_Equation.replace("Theta", str(theta))
-def p1(theta):
-    return P1_Equation.replace("Theta", str(theta))
-def p2(theta):
-    return P2_Equation.replace("Theta", str(theta))
+n = 100
 
-# Unser Operator
-Operator = "P0_Equation + z*P1_Equation + z^2*P2_Equation"
+g0 = [0,1]
+g1 = [0,0]
+g2 = [0,0]
 
-ai = sp.Symbol("ai")
-aiminus1 = sp.Symbol("aiminus1")
-aiminus2 = sp.Symbol("aiminus2")
+for k in range(2,n):
+    g0.append(-sum([p*a for p,a in zip([ev(p1)(k-1),ev(p2)(k-2)],g0[-3:][::-1])])/ev(p0)(k))
+    g1.append(-(sum([p*a for p,a in zip([ev(p1)(k-1),ev(p2)(k-2)],g1[-3:][::-1])])+sum([g0[k]*ev(diff(p0,1))(k),g0[k-1]*ev(diff(p1,1))(k-1),g0[k-2]*ev(diff(p2,1))(k-2)]))/ev(p0)(k))
+    g2.append(-(sum([p*a for p,a in zip([ev(p1)(k-1),ev(p2)(k-2)],g2[-3:][::-1])])+sum([g1[k]*ev(diff(p0,1))(k),g1[k-1]*ev(diff(p1,1))(k-1),g1[k-2]*ev(diff(p2,1))(k-2)])+sum([g0[k]*ev(diff(p0,2))(k),g0[k-1]*ev(diff(p1,2))(k-1),g0[k-2]*ev(diff(p2,2))(k-2)])/2)/ev(p0)(k))
 
-# Unsere Rekursion
+answer1 = sum([a*(1/18)**i for i,a in enumerate(g0)])
+answer2 = math.log(1/18)*sum([a*(1/18)**i for i,a in enumerate(g0)]) + sum([b*(1/18)**i for i,b in enumerate(g1)])
+answer3 = (math.log(1/18)**2)/2*sum([a*(1/18)**i for i,a in enumerate(g0)]) + math.log(1/18)*sum([b*(1/18)**i for i,b in enumerate(g1)]) + sum([c*(1/18)**i for i,c in enumerate(g2)])
 
-
-
-
-# Am Anfang haben wir ja 0 und 1
-coefficients = [0, 1]
-
-#loop
-
-value_aiminus1 = 1 #a_(i-1)
-value_aiminus2 = 0 #a_(i-2)
-
-for i in range(2, 100):
-    recursion = "((-1*aiminus2 * {}) - (aiminus1 * {}))/({})".format(eval(p2(i-2)), eval(p1(i-1)), eval(p0(i)))
-    this_recursion1 = recursion.replace("aiminus1", str(value_aiminus1)) # a_(i-1) einsetzen
-    this_recursion2 = this_recursion1.replace("aiminus2", str(value_aiminus2))# a_(i-2) einsetzen
-    this_recursion = str(this_recursion2.replace("i", str(i))) # i einsetzen
-    new_ai = eval(this_recursion) # der neue ai Wert der berechnet wurde
-    coefficients.append(new_ai) # fügen das zu der Array hinzu
-    value_aiminus2 = float(value_aiminus1)
-    value_aiminus1 = float(new_ai)
-
-
-
-
-answer = 0 # Das Endergebnis
-
-
-
-# Unsere Powerreihe
-iter = 0
-for j in coefficients:
-    answer += int(j)*(float(z)**iter)
-    iter+=1
-
-if (answer != 0.06884969710791095):
-    raise KeyError("Der Wert stimmt nicht")
-
-
-
-
-print("Answer: " + str(answer)) # Das Ergebnis wird geprintet
-
-
-
-
-
-    
+print(f"""
+F0 ANSWER: {answer1}
+F1 ANSWER: {answer2}
+F2 ANSWER: {answer3}
+""")
