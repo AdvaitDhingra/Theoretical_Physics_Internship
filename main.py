@@ -124,8 +124,8 @@ class Solve():
         n = 200
 
         g0 = [0, 1]
-        g1 = [0]
-        g2 = [0]
+        g1 = [0, 0]
+        g2 = [0, 0]
 
         for k in range(1,n):
             if k==1:
