@@ -1,5 +1,4 @@
 import math
-from msilib.schema import Font
 
 def prod(l):
             p = 1
