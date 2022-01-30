@@ -24,7 +24,6 @@ class Solve():
         
 
         # Computations:
-
         n = 100
 
         g0 = [0,1]
@@ -49,7 +48,6 @@ class Solve():
         p4 = [0, 0, 6561, 6561]
 
         # Computations:
-
         n = 200
 
         g0 = [1]
@@ -86,7 +84,6 @@ class Solve():
         p4 = [0, 0, 9, 9]
 
         #Computations:
-
         n = 200
 
         g0 = [1]
@@ -120,12 +117,11 @@ class Solve():
         p2 = [-1, -3, -3, -1]
 
         #Compuatations:
-
         n = 200
 
-        g0 = [0, 1]
+        g0 = [1]
         g1 = [0, 0]
-        g2 = [0, 0]
+        g2 = [0, 1]
 
         for k in range(1,n):
             if k==1:
