@@ -1,3 +1,14 @@
+# ----------------------------------------
+# Welcome IB Examiner!
+# This is the code I used to 
+# 1. Calculate the coefficients a_i, b_i and c_i
+# 2. Use the coefficients to obtain the F_0(z), F_1(z) and F_2(z) functions
+# 3. Use the functions to plot the graphs seen in my EE
+# 
+# I hope you like it :D
+# ----------------------------------------
+
+from cProfile import label
 import math
 
 import numpy as np
@@ -200,7 +211,9 @@ class Solve2():
 
 
 
-[g0,g1,g2] = Solve2().FirstOperator()    
+[g0,g1,g2] = Solve2().FirstOperator() 
+
+print(g1)
 
 
 
@@ -216,7 +229,8 @@ F = lambda z : [3*math.pi**2 * f0(z) + 0*f1(z) - 6 * f2(z), 6*math.pi*f1(z)]
 
 
 
-xs = np.linspace(1/40,1/9,200)
+
+xs = np.linspace(0,1/9,200)
 
 
 
@@ -228,8 +242,14 @@ xs = np.linspace(1/40,1/9,200)
 
 
 
-plt.plot(1/xs,F(xs)[0])
-
-plt.plot(1/xs,-F(xs)[1])
+plt.plot(xs,F(xs)[0], label="Real part")
+plt.axvline(x=1/9, color="red", linestyle='--', label="z=1/9")
+plt.plot(xs,-F(xs)[1], linestyle=":" ,label="Imaginary part")
+plt.legend(loc="upper left")
+plt.xlabel("z")
+plt.ylabel("F(z)")
+plt.savefig('graph.png')
 
 plt.show()
+
+
